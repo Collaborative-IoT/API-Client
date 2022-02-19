@@ -77,3 +77,13 @@ export type DeafAndMuteStatusUpdate = {
   deaf:boolean,
   user_id:boolean
 }
+
+export type BasicResponse = {
+  response_op_code:string,
+  response_containing_data:string
+}
+
+export type BasicRequest = {
+  request_op_code:string,
+  request_containing_data:string
+}

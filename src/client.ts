@@ -1,5 +1,5 @@
 import WebSocket from "isomorphic-ws";
-import { AllUsersInRoomResponse, CommunicationRoom, RoomPermissions } from "./entities";
+import { AllUsersInRoomResponse, AuthCredentials, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions } from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
@@ -13,11 +13,81 @@ type Nullable<T> = T | null;
  */
 export class Client{
     socket: WebSocket
-    public ClientSub: ClientSubscriber
-    constructor(address:string, clientsub:ClientSubscriber){
-        this.socket = new WebSocket(address,undefined);
-        this.ClientSub = clientsub;
+    auth:AuthCredentials
+    public client_sub: ClientSubscriber
+
+    constructor(
+        address:string, 
+        client_sub:ClientSubscriber, 
+        auth_credentials:AuthCredentials){
+            this.socket = new WebSocket(address,undefined);
+            this.client_sub = client_sub;
+            this.auth = auth_credentials;   
     }
+
+    /**
+     * Starts the client
+     */
+    public begin(){
+        let string_auth = JSON.stringify(this.auth);
+        this.socket.onopen = (e) =>{
+            this.socket.send(string_auth);
+        }
+        this.socket.onmessage = (e) =>{
+            this.route(e);
+        }
+    }
+
+    /**
+     * Route incomming messages to the client subscriber defined
+     * functionality
+     */
+     route(e:WebSocket.MessageEvent){
+        let basic_response:BasicResponse = JSON.parse(e.data.toString());
+        switch(basic_response.response_op_code){
+            case "room_permissions":{
+                if (this.client_sub.all_room_permissions){
+                    this.client_sub.all_room_permissions(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+
+            case "user_mute_and_deaf_update":{
+                if (this.client_sub.deaf_and_mute_update){
+                    this.client_sub.deaf_and_mute_update(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+
+            case "@send-track-recv-done":{
+                if (this.client_sub.send_track_recv_done){
+                    this.client_sub.send_track_recv_done(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+
+            case "@send-track-send-done":{
+                if (this.client_sub.send_track_send_done){
+                    this.client_sub.send_track_send_done(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+
+            case "@connect-transport-recv-done":{
+                if (this.client_sub.connect_transport_recv_done){
+                    this.client_sub.connect_transport_recv_done(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+
+            case "@connect-transport-send-done":{
+                if (this.client_sub.connect_transport_send_done){
+                    this.client_sub.connect_transport_send_done(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+
+            case "invalid_request":{
+                if (this.client_sub.invalid_request){
+                    this.client_sub.invalid_request(basic_response.response_containing_data);
+                }
+            }
+        }
+     }
 }
 
 /**
@@ -25,6 +95,10 @@ export class Client{
  * this class is suppose to be directly consumed by the Client
  */
 export class ClientSubscriber{
+    /**
+     * When authentication fails
+     */
+    public bad_auth:Nullable<Handler<any>> = null;
     /**
      * When a request isn't correctly formatted
      */
@@ -55,6 +129,11 @@ export class ClientSubscriber{
      * a speaker
      */
     public you_joined_as_speaker:Nullable<Handler<any>> = null;
+    /**
+     * When the server notifies you that a user updated their
+     * mute/deaf status
+     */
+    public deaf_and_mute_update:Nullable<Handler<DeafAndMuteStatusUpdate>> = null;
     /**
      * When the server sends you all of the permissions for the
      * users in your room
@@ -89,6 +168,4 @@ export class ClientSubscriber{
      * 
      */
     public send_track_send_done:Nullable<Handler<any>> = null;
-
-
 }
