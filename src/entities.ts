@@ -1,17 +1,17 @@
 export type User = {
   you_are_following: boolean,
-  username: String,
+  username: string,
   they_blocked_you: boolean,
   num_following: number,
   num_followers: number,
-  last_online: String,
+  last_online: string,
   user_id: number,
   follows_you: boolean,
   contributions: number,
-  display_name: String,
-  bio: String,
-  avatar_url: String,
-  banner_url: String,
+  display_name: string,
+  bio: string,
+  avatar_url: string,
+  banner_url: string,
   i_blocked_them: boolean,
 }
 
@@ -26,39 +26,39 @@ export type GetFollowListResponse = {
 }
 
 export type RoomDetails = {
-  name:String,
+  name:string,
   chat_throttle:number,
   is_private:boolean,
-  description:String
+  description:string
 }
 
 export type UserPreview = {
-  display_name: String,
-  avatar_url: String
+  display_name: string,
+  avatar_url: string
 }
 
 export type CommunicationRoom = {
   details:RoomDetails,
   room_id:number,
   num_of_people_in_room:number,
-  voice_server_id:String,
+  voice_server_id:string,
   creator_id:number,
   people_preview_data:Map<number, UserPreview>,
   auto_speaker_setting:boolean,
-  created_at:String,
-  chat_mode:String,
+  created_at:string,
+  chat_mode:string,
 }
 
 export type BasicRoomCreation = {
-  name:String,
-  desc:String,
+  name:string,
+  desc:string,
   public:boolean
 }
 
 export type AuthCredentials = {
-  access:String,
-  refresh:String,
-  oauth_type:String
+  access:string,
+  refresh:string,
+  oauth_type:string
 }
 
 export type RoomPermissions = {
