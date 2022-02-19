@@ -1,13 +1,13 @@
 {
-  "name": "@dogehouse/kebab",
-  "author": "Ilya Maximov <mail@overlisted.net> (https://overlisted.net)",
-  "bugs": "https://github.com/benawad/dogehouse/issues",
+  "name": "@collaborative/Arthur",
+  "author": "Ronald Colyar",
+  "bugs": "https://github.com/Collaborative-IoT/Arthur/issues",
   "version": "1.0.0",
   "license": "MIT",
   "keywords": [
-    "dogehouse"
+    "collaborative-iot"
   ],
-  "description": "The official DogeHouse API client.",
+  "description": "The official Collaborative-IoT API client.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

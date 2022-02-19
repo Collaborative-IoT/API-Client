@@ -1,156 +1,79 @@
-import { ConsumerOptions } from "mediasoup-client/lib/types";
+export type User = {
+  you_are_following: boolean,
+  username: String,
+  they_blocked_you: boolean,
+  num_following: number,
+  num_followers: number,
+  last_online: String,
+  user_id: number,
+  follows_you: boolean,
+  contributions: number,
+  display_name: String,
+  bio: String,
+  avatar_url: String,
+  banner_url: String,
+  i_blocked_them: boolean,
+}
 
-export type UUID = string;
+export type AllUsersInRoomResponse = {
+  room_id:number,
+  users:Array<User>
+}
 
-export type RoomPeer = {
-  peerId: UUID;
-  consumerParameters: ConsumerOptions;
-};
-
-export type UserPreview = {
-  id: UUID;
-  displayName: string;
-  numFollowers: number;
-  avatarUrl: string | null;
-};
-
-export type ChatMode = "default" | "disabled" | "follower_only";
+export type GetFollowListResponse = {
+  user_ids:Array<number>,
+  for_user:Number
+}
 
 export type RoomDetails = {
-  name: string;
-  chatThrottle: number;
-  isPrivate: boolean;
-  description: string;
-};
-
-export type Room = RoomDetails & {
-  id: string;
-  numPeopleInside: number;
-  voiceServerId: string;
-  creatorId: string;
-  peoplePreviewList: Array<UserPreview>;
-  autoSpeaker: boolean;
-  inserted_at: string;
-  chatMode: ChatMode;
-};
-
-export interface ScheduledRoom {
-  roomId: UUID | null;
-  description: string;
-  scheduledFor: string;
-  numAttending: number;
-  name: string;
-  id: UUID;
-  creatorId: UUID;
-  creator: User;
+  name:String,
+  chat_throttle:number,
+  is_private:boolean,
+  description:String
 }
 
-export type User = {
-  youAreFollowing?: boolean;
-  username: string;
-  online: boolean;
-  numFollowing: number;
-  numFollowers: number;
-  lastOnline: string;
-  id: UUID;
-  followsYou?: boolean;
-  botOwnerId?: string | null;
-  contributions: number;
-  staff: boolean;
-  displayName: string;
-  currentRoomId?: UUID | null;
-  currentRoom: Room;
-  bio: string | null;
-  avatarUrl: string;
-  bannerUrl: string | null;
-  whisperPrivacySetting: "on" | "off";
-};
+export type UserPreview = {
+  display_name: String,
+  avatar_url: String
+}
 
-export type MessageToken<T extends string = string, V = unknown> = {
-  t: T;
-  v: V;
-};
+export type CommunicationRoom = {
+  details:RoomDetails,
+  room_id:number,
+  num_of_people_in_room:number,
+  voice_server_id:String,
+  creator_id:number,
+  people_preview_data:Map<number, UserPreview>,
+  auto_speaker_setting:boolean,
+  created_at:String,
+  chat_mode:String,
+}
 
-export type TextToken = MessageToken<"text", string>;
-export type MentionToken = MessageToken<"mention", string>;
-export type LinkToken = MessageToken<"link", string>;
-export type EmoteToken = MessageToken<"emote", string>;
-export type CodeBlockToken = MessageToken<"block", string>;
-export type EmojiToken = MessageToken<"emoji", string>;
+export type BasicRoomCreation = {
+  name:String,
+  desc:String,
+  public:boolean
+}
 
-export type Message = {
-  id: UUID;
-  userId: UUID;
-  avatarUrl: UUID;
-  color: string;
-  displayName: string;
-  tokens: MessageToken[];
-  username: string;
-  deleted?: boolean;
-  deleterId?: UUID;
-  sentAt: string;
-  isWhisper?: boolean;
-};
-
-export type BaseUser = {
-  username: string;
-  online: boolean;
-  lastOnline: string;
-  id: string;
-  bio: string;
-  displayName: string;
-  avatarUrl: string;
-  bannerUrl: string;
-  numFollowing: number;
-  numFollowers: number;
-  currentRoom?: Room;
-  botOwnerId?: string;
-  contributions: number;
-  staff: boolean;
-};
+export type AuthCredentials = {
+  access:String,
+  refresh:String,
+  oauth_type:String
+}
 
 export type RoomPermissions = {
-  askedToSpeak: boolean;
-  isSpeaker: boolean;
-  isMod: boolean;
-};
-
-export type UserWithFollowInfo = BaseUser & {
-  followsYou?: boolean;
-  youAreFollowing?: boolean;
-  iBlockedThem?: boolean;
-};
-
-export type RoomUser = {
-  roomPermissions?: RoomPermissions | null;
-} & UserWithFollowInfo;
-
-export type CurrentRoom = Room & {
-  users: RoomUser[];
-  muteMap: BooleanMap;
-  deafMap: BooleanMap;
-  activeSpeakerMap: BooleanMap;
-  autoSpeaker: boolean;
-};
-
-export type BooleanMap = Record<UUID, boolean>;
-
-export enum Relationship {
-  self = 0,
-  following = 1,
-  follower = 2,
-  mutual = 3,
-  none = 7
+  asked_to_speak:boolean,
+  is_speaker:boolean,
+  is_mod:boolean
 }
 
-export enum RoomRole {
-  speaker = 8,
-  raised_hand = 16,
-  listener = 32
+export type DeafAndMuteStatus = {
+  muted:boolean,
+  deaf:boolean
 }
 
-export enum RoomAuth {
-  owner = 8,
-  mod = 16,
-  user = 32
+export type DeafAndMuteStatusUpdate = {
+  muted:boolean,
+  deaf:boolean,
+  user_id:boolean
 }
