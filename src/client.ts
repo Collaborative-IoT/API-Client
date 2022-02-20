@@ -1,5 +1,5 @@
 import WebSocket from "isomorphic-ws";
-import { AllUsersInRoomResponse, AuthCredentials, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions } from "./entities";
+import { AllUsersInRoomResponse, AuthCredentials, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions, RoomUpdate } from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
@@ -50,42 +50,117 @@ export class Client{
                     this.client_sub.all_room_permissions(JSON.parse(basic_response.response_containing_data));
                 }
             }
-
             case "user_mute_and_deaf_update":{
                 if (this.client_sub.deaf_and_mute_update){
                     this.client_sub.deaf_and_mute_update(JSON.parse(basic_response.response_containing_data));
                 }
             }
-
             case "@send-track-recv-done":{
                 if (this.client_sub.send_track_recv_done){
                     this.client_sub.send_track_recv_done(JSON.parse(basic_response.response_containing_data));
                 }
             }
-
             case "@send-track-send-done":{
                 if (this.client_sub.send_track_send_done){
                     this.client_sub.send_track_send_done(JSON.parse(basic_response.response_containing_data));
                 }
             }
-
             case "@connect-transport-recv-done":{
                 if (this.client_sub.connect_transport_recv_done){
                     this.client_sub.connect_transport_recv_done(JSON.parse(basic_response.response_containing_data));
                 }
             }
-
             case "@connect-transport-send-done":{
                 if (this.client_sub.connect_transport_send_done){
                     this.client_sub.connect_transport_send_done(JSON.parse(basic_response.response_containing_data));
                 }
             }
-
             case "invalid_request":{
                 if (this.client_sub.invalid_request){
                     this.client_sub.invalid_request(basic_response.response_containing_data);
                 }
             }
+            case "user_hand_lowered":{
+                if (this.client_sub.user_hand_lowered){
+                    this.client_sub.user_hand_lowered(basic_response.response_containing_data);
+                }
+            }
+            case "user_asking_to_speak":{
+                if (this.client_sub.user_hand_raised){
+                    this.client_sub.user_hand_raised(basic_response.response_containing_data);
+                }
+            }
+            case "issue_creating_room"||"issue_blocking_user"||"issue_adding_speaker":{
+                if(this.client_sub.internal_error){
+                    this.client_sub.internal_error(basic_response.response_containing_data);
+                }
+            }
+            case "room_meta_update":{
+                if (this.client_sub.room_update){
+                    this.client_sub.room_update(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+            case "auth-not-good":{
+                if (this.client_sub.bad_auth){
+                    this.client_sub.bad_auth(basic_response.response_containing_data);
+                }
+            }
+            case "auth-good":{
+                if (this.client_sub.good_auth){
+                    this.client_sub.good_auth(basic_response.response_containing_data);
+                }
+            }
+            case "top_rooms":{
+                if (this.client_sub.top_rooms){
+                    this.client_sub.top_rooms(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+            case "you-joined-as-speaker":{
+                if (this.client_sub.you_joined_as_speaker){
+                    this.client_sub.you_joined_as_speaker(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+            case "you-joined-as-peer":{
+                if(this.client_sub.you_joined_as_peer){
+                    this.client_sub.you_joined_as_peer(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+            case "you_left_room":{
+                if(this.client_sub.you_left_room){
+                    this.client_sub.you_left_room(basic_response.response_containing_data);
+                }
+            }
+            case "new_user_joined":{
+                if(this.client_sub.new_user_joined){
+                    this.client_sub.new_user_joined(basic_response.response_containing_data);
+                }
+            }
+            case "all_users_for_room":{
+                if(this.client_sub.all_users_in_room){
+                    this.client_sub.all_users_in_room(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+            case "speaker_removed":{
+                if(this.client_sub.speaker_removed){
+                    this.client_sub.speaker_removed(basic_response.response_containing_data);
+                }
+            }
+            case "new_speaker":{
+                if(this.client_sub.new_speaker){
+                    this.client_sub.new_speaker(basic_response.response_containing_data);
+                }
+            }
+            case "new-peer-speaker":{
+                if(this.client_sub.new_peer_speaker){
+                    this.client_sub.new_peer_speaker(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+            case "@get-recv-tracks-done":{
+                if(this.client_sub.get_recv_tracks_done){
+                    this.client_sub.get_recv_tracks_done(JSON.parse(basic_response.response_containing_data));
+                }
+            }
+
         }
      }
 }
@@ -95,6 +170,10 @@ export class Client{
  * this class is suppose to be directly consumed by the Client
  */
 export class ClientSubscriber{
+    /**
+     * When authentication succeeds
+     */
+    public good_auth:Nullable<Handler<any>> = null;
     /**
      * When authentication fails
      */
@@ -130,6 +209,11 @@ export class ClientSubscriber{
      */
     public you_joined_as_speaker:Nullable<Handler<any>> = null;
     /**
+     * When the server notifies you that there is a room settings
+     * update
+     */
+    public room_update:Nullable<Handler<RoomUpdate>> = null;
+    /**
      * When the server notifies you that a user updated their
      * mute/deaf status
      */
@@ -142,7 +226,23 @@ export class ClientSubscriber{
     /**
      * When the server sends you all of the top rooms
      */
-    public top_rooms:Nullable<Handler<CommunicationRoom>> = null;
+    public top_rooms:Nullable<Handler<Array<CommunicationRoom>>> = null;
+    /**
+     * When the server encounters an internal error
+     */
+    public internal_error:Nullable<Handler<any>> = null;
+    /**
+     * When the server notifies you that a speaker is removed
+     */
+    public speaker_removed:Nullable<Handler<StringifiedUserId>> = null;
+    /**
+     * When the server notifies you that a new user has joined your room
+     */
+    public new_user_joined:Nullable<Handler<StringifiedUserId>> = null; 
+    /**
+     * When the server notifies you that there is a new speaker
+     */
+    public new_speaker:Nullable<Handler<StringifiedUserId>> = null;
     /**
      * When the server notifies you that there is a new peer speaker
      * 
@@ -168,4 +268,8 @@ export class ClientSubscriber{
      * 
      */
     public send_track_send_done:Nullable<Handler<any>> = null;
+    /**
+     * WEBRTC related
+     */
+    public get_recv_tracks_done:Nullable<Handler<any>> = null;
 }

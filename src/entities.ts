@@ -87,3 +87,11 @@ export type BasicRequest = {
   request_op_code:string,
   request_containing_data:string
 }
+
+export type RoomUpdate = {
+  name: String,
+  public: boolean,
+  chat_throttle: number,
+  description: string,
+  auto_speaker: boolean,
+}
