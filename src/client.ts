@@ -1,5 +1,5 @@
 import WebSocket from "isomorphic-ws";
-import { AllUsersInRoomResponse, AuthCredentials, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions, RoomUpdate } from "./entities";
+import { AllUsersInRoomResponse, AuthCredentials, BasicRequest, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions, RoomUpdate } from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
@@ -39,10 +39,23 @@ export class Client{
     }
 
     /**
+     * Sends a "Basic Request" to the server
+     * @param op 
+     * @param data 
+     */
+    public send(op:string, data:any){
+        let basic_request:BasicRequest = {
+            request_op_code:op,
+            request_containing_data:JSON.stringify(data)
+        };
+        this.socket.send(JSON.stringify(basic_request));
+    }
+
+    /**
      * Route incomming messages to the client subscriber defined
      * functionality
      */
-     route(e:WebSocket.MessageEvent){
+     public route(e:WebSocket.MessageEvent){
         let basic_response:BasicResponse = JSON.parse(e.data.toString());
         switch(basic_response.response_op_code){
             case "room_permissions":{
