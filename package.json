@@ -1,5 +1,5 @@
 {
-  "name": "@collaborative/Arthur",
+  "name": "@collaborative/arthur",
   "author": "Ronald Colyar",
   "bugs": "https://github.com/Collaborative-IoT/Arthur/issues",
   "version": "1.0.0",
@@ -20,14 +20,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/uuid": "^8.3.0",
-    "@types/ws": "^7.4.2",
-    "isomorphic-unfetch": "^3.1.0",
-    "isomorphic-ws": "^4.0.1",
-    "mediasoup-client": "^3.6.30",
-    "reconnecting-websocket": "^4.4.0",
-    "uuid": "^8.3.2",
-    "ws": "^7.4.5"
+    "isomorphic-ws": "^4.0.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

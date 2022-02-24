@@ -30,10 +30,10 @@ export class Client{
      */
     public begin(){
         let string_auth = JSON.stringify(this.auth);
-        this.socket.onopen = (e) =>{
+        this.socket.onopen = (e:any) =>{
             this.socket.send(string_auth);
         }
-        this.socket.onmessage = (e) =>{
+        this.socket.onmessage = (e:any) =>{
             this.route(e);
         }
     }
