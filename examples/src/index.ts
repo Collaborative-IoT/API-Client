@@ -10,8 +10,16 @@ const main = async ()=>{
     };
 
     let subscriber = new ClientSubscriber();
-    let example_client = new Client("ws://127.0.0.1:3030",subscriber, auth_credentials);
+    subscriber.good_auth = (data)=>{
+        console.log(data);
+    }
+    subscriber.bad_auth= (data)=>{
+        console.log(data);
+    }
+    let example_client = new Client("ws://127.0.0.1:3030/user-api",subscriber, auth_credentials);
     example_client.begin();
+    
 }
 
 main(); 
+console.log("done");

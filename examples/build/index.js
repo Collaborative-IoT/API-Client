@@ -46,9 +46,16 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
             oauth_type: "discord"
         };
         subscriber = new arthur_1.ClientSubscriber();
-        example_client = new arthur_1.Client("ws://127.0.0.1:3030", subscriber, auth_credentials);
+        subscriber.good_auth = function (data) {
+            console.log(data);
+        };
+        subscriber.bad_auth = function (data) {
+            console.log(data);
+        };
+        example_client = new arthur_1.Client("ws://127.0.0.1:3030/user-api", subscriber, auth_credentials);
         example_client.begin();
         return [2 /*return*/];
     });
 }); };
 main();
+console.log("done");
