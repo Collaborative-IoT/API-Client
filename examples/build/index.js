@@ -38,8 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var arthur_1 = require("@collaborative/arthur");
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var auth_credentials, subscriber, example_client;
+    var pub_stack, auth_credentials, subscriber, example_client;
     return __generator(this, function (_a) {
+        pub_stack = new Array();
         auth_credentials = {
             access: process.env.ACCESS,
             refresh: process.env.REFRESH,
@@ -47,13 +48,20 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
         };
         subscriber = new arthur_1.ClientSubscriber();
         subscriber.good_auth = function (data) {
-            console.log(data);
+            console.log("auth_passed");
         };
         subscriber.bad_auth = function (data) {
             console.log(data);
         };
+        subscriber.top_rooms = function (data) {
+            console.log("rooms", data);
+        };
         example_client = new arthur_1.Client("ws://127.0.0.1:3030/user-api", subscriber, auth_credentials);
         example_client.begin();
+        //block until open
+        setTimeout(function () {
+            example_client.send("get_top_rooms", {});
+        }, 4000);
         return [2 /*return*/];
     });
 }); };

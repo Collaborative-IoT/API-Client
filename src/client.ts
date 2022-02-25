@@ -34,7 +34,15 @@ export class Client{
             this.socket.send(string_auth);
         }
         this.socket.onmessage = (e:any) =>{
-            this.route(e);
+            try{
+                this.route(e);
+            }
+            catch(error){
+                console.log(e);
+            }
+        }
+        this.socket.onerror  = (e:any)=>{
+            console.log(e);
         }
     }
 
