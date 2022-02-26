@@ -16,13 +16,18 @@ const main = async ()=>{
         console.log(data);
     }
     subscriber.top_rooms = (data)=>{
-        console.log("rooms",data);
+        console.log("rooms_data:",data[0]);
+    }
+    subscriber.your_data = (data)=>{
+        console.log(data);
     }
     let example_client = new Client("ws://127.0.0.1:3030/user-api",subscriber, auth_credentials);
     example_client.begin();
     //give 4 seconds to connect until sending request
     setTimeout(()=>{
+        example_client.send("create_room", {name:"test",desc:"test2",public:true});
         example_client.send("get_top_rooms", {});
+        example_client.send("my_data", {});
     },4000)
 }
 

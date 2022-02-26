@@ -38,9 +38,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var arthur_1 = require("@collaborative/arthur");
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var pub_stack, auth_credentials, subscriber, example_client;
+    var auth_credentials, subscriber, example_client;
     return __generator(this, function (_a) {
-        pub_stack = new Array();
         auth_credentials = {
             access: process.env.ACCESS,
             refresh: process.env.REFRESH,
@@ -54,16 +53,20 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
             console.log(data);
         };
         subscriber.top_rooms = function (data) {
-            console.log("rooms", data);
+            console.log("rooms_data:", data[0]);
+        };
+        subscriber.your_data = function (data) {
+            console.log(data);
         };
         example_client = new arthur_1.Client("ws://127.0.0.1:3030/user-api", subscriber, auth_credentials);
         example_client.begin();
-        //block until open
+        //give 4 seconds to connect until sending request
         setTimeout(function () {
+            example_client.send("create_room", { name: "test", desc: "test2", public: true });
             example_client.send("get_top_rooms", {});
+            example_client.send("my_data", {});
         }, 4000);
         return [2 /*return*/];
     });
 }); };
 main();
-console.log("done");

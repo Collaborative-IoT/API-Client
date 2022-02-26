@@ -1,5 +1,6 @@
 import WebSocket from "isomorphic-ws";
-import { AllUsersInRoomResponse, AuthCredentials, BasicRequest, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions, RoomUpdate } from "./entities";
+import { BaseUser } from ".";
+import { AuthResponse,AllUsersInRoomResponse, AuthCredentials, BasicRequest, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions, RoomUpdate } from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
@@ -65,6 +66,7 @@ export class Client{
      */
      public route(e:WebSocket.MessageEvent){
         let basic_response:BasicResponse = JSON.parse(e.data.toString());
+        console.log(basic_response);
         switch(basic_response.response_op_code){
             case "room_permissions":{
                 if (this.client_sub.all_room_permissions){
@@ -123,12 +125,12 @@ export class Client{
             }
             case "auth-not-good":{
                 if (this.client_sub.bad_auth){
-                    this.client_sub.bad_auth(basic_response.response_containing_data);
+                    this.client_sub.bad_auth(JSON.parse(basic_response.response_containing_data));
                 }
             }
             case "auth-good":{
                 if (this.client_sub.good_auth){
-                    this.client_sub.good_auth(basic_response.response_containing_data);
+                    this.client_sub.good_auth(JSON.parse(basic_response.response_containing_data));
                 }
             }
             case "top_rooms":{
@@ -181,6 +183,11 @@ export class Client{
                     this.client_sub.get_recv_tracks_done(JSON.parse(basic_response.response_containing_data));
                 }
             }
+            case "your_data":{
+                if(this.client_sub.your_data){
+                    this.client_sub.your_data(JSON.parse(basic_response.response_containing_data));
+                }
+            }
 
         }
      }
@@ -194,11 +201,11 @@ export class ClientSubscriber{
     /**
      * When authentication succeeds
      */
-    public good_auth:Nullable<Handler<any>> = null;
+    public good_auth:Nullable<Handler<AuthResponse>> = null;
     /**
      * When authentication fails
      */
-    public bad_auth:Nullable<Handler<any>> = null;
+    public bad_auth:Nullable<Handler<AuthResponse>> = null;
     /**
      * When a request isn't correctly formatted
      */
@@ -239,6 +246,10 @@ export class ClientSubscriber{
      * mute/deaf status
      */
     public deaf_and_mute_update:Nullable<Handler<DeafAndMuteStatusUpdate>> = null;
+    /**
+     * When the server sends you your data
+     */
+    public your_data:Nullable<Handler<BaseUser>> = null;
     /**
      * When the server sends you all of the permissions for the
      * users in your room

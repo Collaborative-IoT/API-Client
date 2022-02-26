@@ -89,9 +89,27 @@ export type BasicRequest = {
 }
 
 export type RoomUpdate = {
-  name: String,
+  name: string,
   public: boolean,
   chat_throttle: number,
   description: string,
   auto_speaker: boolean,
+}
+
+export type AuthResponse = {
+  new_access: string,
+  new_refresh: string,
+}
+
+export type BaseUser = {
+   username: string,
+   last_online: string,
+   user_id: number,
+   bio: string,
+   display_name: string,
+   avatar_url: string,
+   banner_url: string,
+   num_following: number,
+   num_followers: number,
+   contributions: number,
 }
