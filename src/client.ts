@@ -1,6 +1,9 @@
 import WebSocket from "isomorphic-ws";
-import { BaseUser } from ".";
-import { AuthResponse,AllUsersInRoomResponse, AuthCredentials, BasicRequest, BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, RoomPermissions, RoomUpdate } from "./entities";
+import { BaseUser, GetFollowListResponse } from ".";
+import { 
+    AuthResponse,AllUsersInRoomResponse, AuthCredentials, BasicRequest, 
+    BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, 
+    RoomPermissions, RoomUpdate } from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
@@ -188,7 +191,11 @@ export class Client{
                     this.client_sub.your_data(JSON.parse(basic_response.response_containing_data));
                 }
             }
-
+            case "follow_list_response":{
+                if(this.client_sub.followers){
+                    this.client_sub.followers(JSON.parse(basic_response.response_containing_data));
+                }
+            }
         }
      }
 }
@@ -210,6 +217,10 @@ export class ClientSubscriber{
      * When a request isn't correctly formatted
      */
     public invalid_request:Nullable<Handler<string>> = null;
+    /**
+     * When the server sends a follow list
+     */
+    public followers:Nullable<Handler<GetFollowListResponse>> = null;
     /**
      * When a user raises their hand
      */
