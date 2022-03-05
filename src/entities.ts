@@ -116,6 +116,7 @@ export type BaseUser = {
 
 export type FollowInfo = {
      user_id: number,
+     username:string,
      avatar_url: string,
      online: boolean,
      room_id: number | null,
