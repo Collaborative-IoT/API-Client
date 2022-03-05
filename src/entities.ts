@@ -21,7 +21,7 @@ export type AllUsersInRoomResponse = {
 }
 
 export type GetFollowListResponse = {
-  user_ids:Array<number>,
+  user_ids:Array<FollowInfo>,
   for_user:Number
 }
 
@@ -112,4 +112,11 @@ export type BaseUser = {
    num_following: number,
    num_followers: number,
    contributions: number,
+}
+
+export type FollowInfo = {
+     user_id: number,
+     avatar_url: string,
+     online: boolean,
+     room_id: number | null,
 }
