@@ -121,3 +121,10 @@ export type FollowInfo = {
      online: boolean,
      room_id: number | null,
 }
+
+export type VoiceServerResponse = {
+    op:string,
+    d:any,
+    uid:string|null,
+    rid:string|null
+}
