@@ -49,6 +49,14 @@ export type CommunicationRoom = {
   chat_mode:string,
 }
 
+export type InitRoomData =  {
+  details: RoomDetails,
+  creator_id: number,
+  auto_speaker_setting: number,
+  created_at: string,
+  chat_mode: string,
+}
+
 export type BasicRoomCreation = {
   name:string,
   desc:string,
