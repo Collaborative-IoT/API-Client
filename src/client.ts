@@ -241,6 +241,12 @@ export class Client{
                 if(this.client_sub.initial_room_data){
                     this.client_sub.initial_room_data(JSON.parse(basic_response.response_containing_data));
                 }
+                break;
+            }
+            case "new_chat_message":{
+                if(this.client_sub.new_chat_msg){
+                    this.client_sub.new_chat_msg(JSON.parse(basic_response.response_containing_data));
+                }
             }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
@@ -286,6 +292,10 @@ export class ClientSubscriber{
      * When the server notifies you that you are no longer a room
      */
     public you_left_room:Nullable<Handler<any>> = null;
+    /**
+     * When the server lets you know there is a new message
+     */
+    public new_chat_msg:Nullable<Handler<any>> = null;
     /**
      * When the server notifies you that you joined a room as
      * a peer
