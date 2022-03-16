@@ -247,6 +247,7 @@ export class Client{
                 if(this.client_sub.new_chat_msg){
                     this.client_sub.new_chat_msg(JSON.parse(basic_response.response_containing_data));
                 }
+                break;
             }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
