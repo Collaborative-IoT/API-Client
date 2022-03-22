@@ -136,3 +136,8 @@ export type VoiceServerResponse = {
     uid:string|null,
     rid:string|null
 }
+
+export type JoinTypeInfo = {
+    as_speaker: boolean,
+    as_listener: boolean,
+}

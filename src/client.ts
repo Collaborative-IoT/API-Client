@@ -3,7 +3,7 @@ import { BaseUser, GetFollowListResponse, InitRoomData, UserPreview } from ".";
 import { 
     AuthResponse,AllUsersInRoomResponse, AuthCredentials, BasicRequest, 
     BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, 
-    RoomPermissions, RoomUpdate } from "./entities";
+    RoomPermissions, RoomUpdate, JoinTypeInfo } from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
@@ -249,6 +249,12 @@ export class Client{
                 }
                 break;
             }
+            case "join_type_info":{
+                if(this.client_sub.join_type_info){
+                    this.client_sub.join_type_info(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -358,6 +364,11 @@ export class ClientSubscriber{
      * The initial data that is sent when you join a room
      */
     public initial_room_data:Nullable<Handler<InitRoomData>> = null;
+    /**
+     * When the server sends join type info for joining a room initially
+     * this is when you try to join an existing room
+     */
+    public join_type_info:Nullable<Handler<JoinTypeInfo>> = null;
     /**
      * When the server notifies you that your request to create a room
      * was successful.
