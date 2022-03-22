@@ -140,4 +140,5 @@ export type VoiceServerResponse = {
 export type JoinTypeInfo = {
     as_speaker: boolean,
     as_listener: boolean,
+    room_id:number
 }
