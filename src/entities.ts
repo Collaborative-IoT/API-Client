@@ -142,3 +142,13 @@ export type JoinTypeInfo = {
     as_listener: boolean,
     room_id:number
 }
+
+export type SingleUserPermissionResults =  {
+    user_id: number,
+    data: RoomPermissions,
+}
+
+export type SingleUserDataResults = {
+  user_id: number,
+  data: User,
+}

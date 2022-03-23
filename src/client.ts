@@ -1,5 +1,5 @@
 import WebSocket from "isomorphic-ws";
-import { BaseUser, GetFollowListResponse, InitRoomData, UserPreview } from ".";
+import { BaseUser, GetFollowListResponse, InitRoomData, SingleUserDataResults, SingleUserPermissionResults, UserPreview } from ".";
 import { 
     AuthResponse,AllUsersInRoomResponse, AuthCredentials, BasicRequest, 
     BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, 
@@ -255,6 +255,18 @@ export class Client{
                 }
                 break;
             }
+            case "single_user_permissions":{
+                if(this.client_sub.single_user_permissions){
+                    this.client_sub.single_user_permissions(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
+            case "single_user_data":{
+                if(this.client_sub.single_user_data){
+                    this.client_sub.single_user_data(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -303,6 +315,14 @@ export class ClientSubscriber{
      * When the server lets you know there is a new message
      */
     public new_chat_msg:Nullable<Handler<any>> = null;
+    /**
+     * When the server sends you the permissions of a single user
+     */
+    public single_user_permissions:Nullable<Handler<SingleUserPermissionResults>> = null;
+    /**
+     * When the server sends you a single user's data
+     */
+    public single_user_data:Nullable<Handler<SingleUserDataResults>> = null;
     /**
      * When the server notifies you that you joined a room as
      * a peer
