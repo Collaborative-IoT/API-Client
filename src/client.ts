@@ -267,6 +267,12 @@ export class Client{
                 }
                 break;
             }
+            case "user_left_room":{
+                if(this.client_sub.user_left_room){
+                    this.client_sub.user_left_room(basic_response.response_containing_data);
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -394,6 +400,10 @@ export class ClientSubscriber{
      * was successful.
      */
     public room_created:Nullable<Handler<number>> = null;
+    /**
+     * When the server lets you know that a user left the room
+     */
+    public user_left_room:Nullable<Handler<StringifiedUserId>> = null;
     /**
      * When the server notifies you that there is a new peer speaker
      * 
