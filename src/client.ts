@@ -273,6 +273,18 @@ export class Client{
                 }
                 break;
             }
+            case "user_follow_successful":{
+                if(this.client_sub.user_follow_successful){
+                    this.client_sub.user_follow_successful(basic_response.response_containing_data);
+                }
+                break;
+            }
+            case "user_unfollow_successful":{
+                if(this.client_sub.user_unfollow_successful){
+                    this.client_sub.user_unfollow_successful(basic_response.response_containing_data);
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -400,6 +412,14 @@ export class ClientSubscriber{
      * was successful.
      */
     public room_created:Nullable<Handler<number>> = null;
+    /**
+     * When your follow user request was successful
+     */
+    public user_follow_successful:Nullable<Handler<StringifiedUserId>> = null;
+    /**
+     * When your unfollow user request was successful
+     */
+    public user_unfollow_successful:Nullable<Handler<StringifiedUserId>> = null;
     /**
      * When the server lets you know that a user left the room
      */
