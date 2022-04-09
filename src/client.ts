@@ -285,6 +285,36 @@ export class Client{
                 }
                 break;
             }
+            case "profile_updated":{
+                if(this.client_sub.profile_updated){
+                    this.client_sub.profile_updated(basic_response.response_containing_data);
+                }
+                break;
+            }
+            case "user_info_updated":{
+                if(this.client_sub.user_info_updated){
+                    this.client_sub.user_info_updated(basic_response.response_containing_data);
+                }
+                break;
+            }
+            case "new_mod":{
+                if(this.client_sub.new_mod){
+                    this.client_sub.new_mod(basic_response.response_containing_data);
+                }
+                break;
+            }
+            case "removed_mod":{
+                if(this.client_sub.removed_mod){
+                    this.client_sub.removed_mod(basic_response.response_containing_data);
+                }
+                break;
+            }
+            case "new_owner":{
+                if(this.client_sub.new_owner){
+                    this.client_sub.new_owner(basic_response.response_containing_data);
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -379,6 +409,15 @@ export class ClientSubscriber{
      */
     public top_rooms:Nullable<Handler<Array<CommunicationRoom>>> = null;
     /**
+     * When the server lets you know a user in the same room/other
+     * as you updates their information
+     */
+    public user_info_updated:Nullable<Handler<StringifiedUserId>> = null;
+    /**
+     * when the server notifies you that your profile was updated 
+     */
+    public profile_updated:Nullable<Handler<any>> = null;
+    /**
      * When the server encounters an internal error
      */
     public internal_error:Nullable<Handler<any>> = null;
@@ -407,6 +446,18 @@ export class ClientSubscriber{
      * this is when you try to join an existing room
      */
     public join_type_info:Nullable<Handler<JoinTypeInfo>> = null;
+    /**
+     * When someone is demoted from mod status
+     */
+    public removed_mod:Nullable<Handler<StringifiedUserId>> = null;
+    /**
+     * When a new owner is selected for a room
+     */
+    public new_owner:Nullable<Handler<StringifiedUserId>> = null;
+    /**
+     * When a new person is promoted to mod
+     */
+    public new_mod:Nullable<Handler<StringifiedUserId>> = null;
     /**
      * When the server notifies you that your request to create a room
      * was successful.
