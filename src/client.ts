@@ -3,7 +3,7 @@ import { BaseUser, GetFollowListResponse, InitRoomData, SingleUserDataResults, S
 import { 
     AuthResponse,AllUsersInRoomResponse, AuthCredentials, BasicRequest, 
     BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, 
-    RoomPermissions, RoomUpdate, JoinTypeInfo } from "./entities";
+    RoomPermissions, RoomUpdate, JoinTypeInfo, NewIoTController, RemovedIoTController } from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
@@ -315,6 +315,36 @@ export class Client{
                 }
                 break;
             }
+            case "new_iot_server":{
+                if(this.client_sub.new_iot_server){
+                    this.client_sub.new_iot_server(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
+            case "hoi_server_disconnected":{
+                if(this.client_sub.hoi_server_disconnected){
+                    this.client_sub.hoi_server_disconnected(basic_response.response_containing_data);
+                }
+                break;
+            }
+            case "new_hoi_controller" :{
+                if(this.client_sub.new_hoi_controller){
+                    this.client_sub.new_hoi_controller(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
+            case "removed_hoi_controller" :{
+                if(this.client_sub.removed_hoi_controller){
+                    this.client_sub.removed_hoi_controller(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
+            case "passive_data":{
+                if(this.client_sub.passive_data){
+                    this.client_sub.passive_data(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -400,6 +430,31 @@ export class ClientSubscriber{
      */
     public your_data:Nullable<Handler<BaseUser>> = null;
     /**
+     * When the server notifies you that there is a new iot server
+     * connection to your current room
+     */
+    public new_iot_server:Nullable<Handler<NewIoTServer>> = null;
+    /**
+     * When the server notifies you that a iot server has been
+     * disconnected from the room
+     */
+    public hoi_server_disconnected:Nullable<Handler<String>> = null;
+    /**
+     * When the server notifies you that there is a new person
+     * added to the controllers of an iot server connected to 
+     * your room
+     */
+    public new_hoi_controller:Nullable<Handler<NewIoTController>> = null;
+    /**
+     * When the server notifies you that a person's permission to
+     * control an IoT server has been revoked.
+     */
+    public removed_hoi_controller:Nullable<Handler<RemovedIoTController>> = null;
+    /**
+     * When the server sends you passive data for an iot server
+     */
+    public passive_data:Nullable<Handler<PassiveData>> = null;
+    /** 
      * When the server sends you all of the permissions for the
      * users in your room
      */
@@ -425,6 +480,10 @@ export class ClientSubscriber{
      * When the server notifies you that a speaker is removed
      */
     public speaker_removed:Nullable<Handler<StringifiedUserId>> = null;
+    /**
+     * When the server notifies you that a new user was blocked
+     */
+    public new_blocked_user:Nullable<Handler<StringifiedUserId>> = null;
     /**
      * When the server notifies you that a new user has joined your room
      */

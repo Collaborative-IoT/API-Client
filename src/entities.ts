@@ -152,3 +152,23 @@ export type SingleUserDataResults = {
   user_id: number,
   data: User,
 }
+
+export type NewIoTServer = {
+  external_id: String,
+  owner_id: number,
+}
+
+export type NewIoTController = {
+  external_id: String,
+  user_id:number,
+}
+
+export type RemovedIoTController = {
+  external_id: String,
+  user_id:number,
+}
+
+export type PassiveData = {
+  external_id: String,
+  passive_data: String,
+}
