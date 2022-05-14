@@ -177,5 +177,5 @@ export type ExistingIotServer = {
   owner_id:number,
   external_id:String,
   controllers_of_room:Array<number>,
-  passive_data_snap_shot:Array<any> 
+  passive_data_snap_shot:String|null 
 }
