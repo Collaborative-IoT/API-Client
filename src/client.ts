@@ -443,7 +443,7 @@ export class ClientSubscriber{
     /**
      * When the server sends you the existing IoT
      */
-    public existing_iot_data:Nullable<Handler<ExistingIotServer>> = null;
+    public existing_iot_data:Nullable<Handler<Array<ExistingIotServer>>> = null;
     /**
      * When the server notifies you that a iot server has been
      * disconnected from the room
