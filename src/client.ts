@@ -3,7 +3,7 @@ import { BaseUser, GetFollowListResponse, InitRoomData, SingleUserDataResults, S
 import { 
     AuthResponse,AllUsersInRoomResponse, AuthCredentials, BasicRequest, 
     BasicResponse, CommunicationRoom, DeafAndMuteStatusUpdate, 
-    RoomPermissions, RoomUpdate, JoinTypeInfo, NewIoTController, RemovedIoTController } from "./entities";
+    RoomPermissions, RoomUpdate, JoinTypeInfo, NewIoTController, RemovedIoTController ,ExistingIotServer,PassiveData,NewIoTServer} from "./entities";
 type StringifiedUserId = string;
 type Handler<Data> = (data: Data) => void;
 type Nullable<T> = T | null;
