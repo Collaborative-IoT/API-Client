@@ -172,3 +172,9 @@ export type PassiveData = {
   external_id: String,
   passive_data: String,
 }
+
+export type ExistingIotServer = {
+  owner_id:number,
+  controllers_of_room:Vec<number>,
+  passive_data_snap_shot:Vec<any> 
+}

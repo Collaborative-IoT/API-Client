@@ -345,6 +345,12 @@ export class Client{
                 }
                 break;
             }
+            case "existing_iot_data":{
+                if(this.client_sub.existing_iot_data){
+                    this.client_sub.existing_iot_data(JSON.parse(basic_response.response_containing_data));
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -434,6 +440,10 @@ export class ClientSubscriber{
      * connection to your current room
      */
     public new_iot_server:Nullable<Handler<NewIoTServer>> = null;
+    /**
+     * When the server sends you the existing IoT
+     */
+    public existing_iot_data:Nullable<Handler<ExistingIotServer>> = null;
     /**
      * When the server notifies you that a iot server has been
      * disconnected from the room
