@@ -162,6 +162,7 @@ export type NewIoTServer = {
 export type NewIoTController = {
   external_id: String,
   user_id:number,
+  outside_name:String,
 }
 
 export type RemovedIoTController = {
