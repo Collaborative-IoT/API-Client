@@ -156,6 +156,7 @@ export type SingleUserDataResults = {
 export type NewIoTServer = {
   external_id: String,
   owner_id: number,
+  outside_name:String,
 }
 
 export type NewIoTController = {
@@ -178,4 +179,5 @@ export type ExistingIotServer = {
   external_id:String,
   controllers_of_room:Array<number>,
   passive_data_snap_shot:String|null 
+  outside_name:String,
 }
