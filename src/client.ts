@@ -351,6 +351,12 @@ export class Client{
                 }
                 break;
             }
+            case "action_response_iot":{
+                if(this.client_sub.action_response_iot){
+                    this.client_sub.action_response_iot(basic_response.response_containing_data);
+                }
+                break;
+            }
             default:
                 console.log('general error:',basic_response,basic_response.response_op_code == "top_rooms" || basic_response.response_containing_data == "your_data");
                 break
@@ -440,6 +446,11 @@ export class ClientSubscriber{
      * connection to your current room
      */
     public new_iot_server:Nullable<Handler<NewIoTServer>> = null;
+    /**
+     * When the server notifies you that an action has completeted
+     * and has a response.
+     */
+    public action_response_iot:Nullable<Handler<String>> = null;
     /**
      * When the server sends you the existing IoT
      */
