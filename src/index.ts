@@ -1,2 +1,2 @@
 export * from "./entities";
-export * from  "./client";
+export * from "./client";
